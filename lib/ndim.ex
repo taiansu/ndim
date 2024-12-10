@@ -230,6 +230,7 @@ defmodule Ndim do
     end
   end
 
+  defp check_regular(elem) when not is_list(elem), do: false
   defp check_regular([]), do: true
 
   defp check_regular([head | tail]) do
