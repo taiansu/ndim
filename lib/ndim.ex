@@ -99,15 +99,15 @@ defmodule Ndim do
 
   ## Examples
 
-      ```elixir
-      iex> numbers = [[1, 2], [3, 4], [5, 6]]
-      iex> Ndim.dmap(numbers, 2, fn i -> i * 10 end)
-      [[10, 20], [30, 40], [50, 60]]
+    ```elixir
+    iex> numbers = [[1, 2], [3, 4], [5, 6]]
+    iex> Ndim.dmap(numbers, 2, fn i -> i * 10 end)
+    [[10, 20], [30, 40], [50, 60]]
 
-      iex> nested = [[["a", "b"], ["c", "d"]], [["e", "f"], ["g", "h"]], [["i", "j"], ["k", "l"]]]
-      iex> Ndim.dmap(nested, 3, &String.upcase/1)
-      [[["A", "B"], ["C", "D"]], [["E", "F"], ["G", "H"]], [["I", "J"], ["K", "L"]]]
-      ```
+    iex> nested = [[["a", "b"], ["c", "d"]], [["e", "f"], ["g", "h"]], [["i", "j"], ["k", "l"]]]
+    iex> Ndim.dmap(nested, 3, &String.upcase/1)
+    [[["A", "B"], ["C", "D"]], [["E", "F"], ["G", "H"]], [["I", "J"], ["K", "L"]]]
+    ```
   """
   def dmap(list, dim, func) do
     dim_accessors = List.duplicate(Access.all(), dim)
