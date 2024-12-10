@@ -34,14 +34,22 @@ of nesting. Each level must maintain consistent structure:
 
 #### 2-dimensional list (matrix)
 ```elixir
-[[1, 2, 3],
-  [4, 5, 6]]
+[
+  [1, 2, 3],
+  [4, 5, 6]
+]
 ```
 
 #### 3-dimensional list (cube)
 ```elixir
-[[[1, 2], [3, 4]],
-  [[5, 6], [7, 8]]]
+[
+  [
+    [1, 2], [3, 4]
+  ],
+  [
+    [5, 6], [7, 8]
+  ]
+]
 ```
 
 ### Coordinate Map
@@ -80,6 +88,14 @@ iex> numbers = [[1, 2], [3, 4]]
 iex> Ndim.d2map(numbers, fn x -> x * 2 end)
 [[2, 4], [6, 8]]
 ```
+
+Map a function over a n-dimensional list, with specified dimension, which is `3`
+```elixir
+iex> nested = [[["a", "b"], ["c", "d"]], [["e", "f"], ["g", "h"]], [["i", "j"], ["k", "l"]]]
+iex> Ndim.dmap(nested, 3, &String.upcase/1)
+[[["A", "B"], ["C", "D"]], [["E", "F"], ["G", "H"]], [["I", "J"], ["K", "L"]]]
+```
+
 
 Transform a 2-dimensional list to a coordinate map
 ```elixir

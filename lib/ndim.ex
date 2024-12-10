@@ -3,8 +3,8 @@ defmodule Ndim do
   The `Ndim` lib provides functions for working with n-dimensional lists.
 
   This module is particularly useful when you need to:
-    * Map functions over deeply nested lists at a specific level while maintaining their shape
-    * Transform between the n-dimensional list and the coordinated map
+  * Map functions over deeply nested lists at a specific level while maintaining their shape
+  * Transform between the n-dimensional list and the coordinated map
 
   ## Terminology
 
@@ -13,20 +13,31 @@ defmodule Ndim do
   of nesting. Each level must maintain consistent structure:
 
   # 1-dimensional list (vector)
+
   ```elixir
   [1, 2, 3]
   ```
 
   # 2-dimensional list (matrix)
+
   ```elixir
-  [[1, 2, 3],
-    [4, 5, 6]]
+  [
+    [1, 2, 3],
+    [4, 5, 6]
+  ]
   ```
 
   # 3-dimensional list (cube)
+
   ```elixir
-  [[[1, 2], [3, 4]],
-    [[5, 6], [7, 8]]]
+  [
+    [
+      [1, 2], [3, 4]
+    ],
+    [
+      [5, 6], [7, 8]
+    ]
+  ]
   ```
 
   ### Coordinate map
@@ -35,6 +46,7 @@ defmodule Ndim do
   you need direct coordinate access:
 
   #### From 2-dimensional list to 2d coordinate map
+
   ```elixir
   [
     [1, 2],     -->  %{{0, 0} => 1, {0, 1} => 2,
@@ -43,6 +55,7 @@ defmodule Ndim do
   ```
 
   #### From 3-dimensional list to 3d coordinate map
+
   ```elixir
   [
     [[1, 2]],   -->  %{{0, 0, 0} => 1, {0, 0, 1} => 2,
@@ -52,26 +65,27 @@ defmodule Ndim do
 
   ## Core functions
 
-    * `d2map/2` ... `d5map/2` - Map a function over a 2-dimensonal list (upto 5)
-    * `dmap/3` - The general version which maps a function over elements at any specified dimensional list
-    * `to_coordinate_map/1` - Transform a n-dimensional list to a coordinate map
+  * `d2map/2` ... `d5map/2` - Map a function over a 2-dimensonal list (upto 5)
+  * `dmap/3` - The general version which maps a function over elements at any specified dimensional list
+  * `to_coordinate_map/1` - Transform a n-dimensional list to a coordinate map
 
   ## Examples
 
   Map a function over a 2-dimensional list
 
-  ```elixir
-  iex> numbers = [[1, 2], [3, 4]]
-  iex> Ndim.d2map(numbers, fn x -> x * 2 end)
-  [[2, 4], [6, 8]]
-  ```
+    ```elixir
+    iex> numbers = [[1, 2], [3, 4]]
+    iex> Ndim.d2map(numbers, fn x -> x * 2 end)
+    [[2, 4], [6, 8]]
+    ```
 
   Transform a 2-dimensional list to a coordinate map
-  ```elixir
-  iex> vector = [[1, 2], [3, 4]]
-  iex> Ndim.to_coordinate_map(vector)
-  %{{0, 0} => 1, {0, 1} => 2, {1, 0} => 3, {1, 1} => 4}
-  ```
+
+    ```elixir
+    iex> vector = [[1, 2], [3, 4]]
+    iex> Ndim.to_coordinate_map(vector)
+    %{{0, 0} => 1, {0, 1} => 2, {1, 0} => 3, {1, 1} => 4}
+    ```
   """
 
   @doc """
@@ -84,16 +98,16 @@ defmodule Ndim do
     * `fun` - The function to apply at the specified dimension
 
   ## Examples
-  ```elixir
-  iex> numbers = [[1, 2], [3, 4], [5, 6]]
-  iex> Ndim.dmap(numbers, 2, fn i -> i * 10 end)
-  [[10, 20], [30, 40], [50, 60]]
 
-  iex> nested = [[["a", "b"], ["c", "d"]], [["e", "f"], ["g", "h"]], [["i", "j"], ["k", "l"]]]
-  iex> Ndim.dmap(nested, 3, &String.upcase/1)
-  [[["A", "B"], ["C", "D"]], [["E", "F"], ["G", "H"]], [["I", "J"], ["K", "L"]]]
-  ```
+      ```elixir
+      iex> numbers = [[1, 2], [3, 4], [5, 6]]
+      iex> Ndim.dmap(numbers, 2, fn i -> i * 10 end)
+      [[10, 20], [30, 40], [50, 60]]
 
+      iex> nested = [[["a", "b"], ["c", "d"]], [["e", "f"], ["g", "h"]], [["i", "j"], ["k", "l"]]]
+      iex> Ndim.dmap(nested, 3, &String.upcase/1)
+      [[["A", "B"], ["C", "D"]], [["E", "F"], ["G", "H"]], [["I", "J"], ["K", "L"]]]
+      ```
   """
   def dmap(list, dim, func) do
     dim_accessors = List.duplicate(Access.all(), dim)
@@ -106,6 +120,8 @@ defmodule Ndim do
   This is equivalent to calling `dmap(list, 2, fun)`.
 
   ## Examples
+
+    ```elixir
      iex> numbers = [[1, 2], [3, 4], [5, 6]]
      iex> Ndim.d2map(numbers, fn x -> x * 2 end)
      [[2, 4], [6, 8], [10, 12]]
@@ -113,6 +129,7 @@ defmodule Ndim do
      iex> strings = [["a", "b"], ["c", "d"]]
      iex> Ndim.d2map(strings, &String.upcase/1)
      [["A", "B"], ["C", "D"]]
+     ```
   """
   def d2map(list, fun), do: dmap(list, 2, fun)
 
@@ -122,6 +139,8 @@ defmodule Ndim do
   This is equivalent to calling `dmap(list, 3, fun)`.
 
   ## Examples
+
+    ```elixir
      iex> numbers = [[[1, 2], [3, 4]], [[5, 6], [7, 8]]]
      iex> Ndim.d3map(numbers, fn x -> x + 1 end)
      [[[2, 3], [4, 5]], [[6, 7], [8, 9]]]
@@ -129,6 +148,7 @@ defmodule Ndim do
      iex> strings = [[["hello", "world"], ["foo"]], [["bar"], ["baz", "qux"]]]
      iex> Ndim.d3map(strings, &String.capitalize/1)
      [[["Hello", "World"], ["Foo"]], [["Bar"], ["Baz", "Qux"]]]
+     ```
   """
   def d3map(list, fun), do: dmap(list, 3, fun)
 
@@ -138,6 +158,8 @@ defmodule Ndim do
   This is equivalent to calling `dmap(list, 4, fun)`.
 
   ## Examples
+
+    ```elixir
      iex> numbers = [[[[1, 2], [3]], [[4, 5]]], [[[6]], [[7, 8], [9]]]]
      iex> Ndim.d4map(numbers, fn x -> x * 2 end)
      [[[[2, 4], [6]], [[8, 10]]], [[[12]], [[14, 16], [18]]]]
@@ -145,6 +167,7 @@ defmodule Ndim do
      iex> strings = [[[[{"a", 1}]]], [[[{"b", 2}]]]]
      iex> Ndim.d4map(strings, fn {str, num} -> {String.upcase(str), num} end)
      [[[[{"A", 1}]]], [[[{"B", 2}]]]]
+     ```
   """
   def d4map(list, fun), do: dmap(list, 4, fun)
 
@@ -154,6 +177,8 @@ defmodule Ndim do
   This is equivalent to calling `dmap(list, 5, fun)`.
 
   ## Examples
+
+    ```elixir
      iex> numbers = [[[[[1]], [[2]]], [[[3]]]], [[[[4]]], [[[5]], [[6]]]]]
      iex> Ndim.d5map(numbers, fn x -> x + 10 end)
      [[[[[11]], [[12]]], [[[13]]]], [[[[14]]], [[[15]], [[16]]]]]
@@ -161,6 +186,7 @@ defmodule Ndim do
      iex> data = [[[[[%{x: 1}]], [[%{x: 2}]]]], [[[[%{x: 3}]]]]]
      iex> Ndim.d5map(data, fn map -> Map.update!(map, :x, & &1 * 2) end)
      [[[[[%{x: 2}]], [[%{x: 4}]]]], [[[[%{x: 6}]]]]]
+     ```
   """
   def d5map(list, fun), do: dmap(list, 5, fun)
 
@@ -174,6 +200,8 @@ defmodule Ndim do
    * `dimension` - (Optional) The expected dimension of the nested list
 
   ## Examples
+
+    ```elixir
      # Automatic dimension detection
      iex> matrix = [[1, 2], [3, 4]]
      iex> Ndim.to_coordinate_map(matrix)
@@ -192,6 +220,7 @@ defmodule Ndim do
      iex> cube = [[[1, 2]], [[3, 4]]]
      iex> Ndim.to_coordinate_map(cube, 3)
      %{{0, 0, 0} => 1, {0, 0, 1} => 2, {1, 0, 0} => 3, {1, 0, 1} => 4}
+     ```
 
   ## Return Value
   Returns a map where keys are tuples of coordinates and values are the corresponding
@@ -266,6 +295,8 @@ defmodule Ndim do
   nested structures where elements at the same depth share the same dimensionality.
 
   ## Examples
+
+    ```elixir
      iex> Ndim.get_depth([])
      0
 
@@ -277,13 +308,17 @@ defmodule Ndim do
 
      iex> Ndim.get_depth([[[1, 2]], [[3, 4]]])
      3
+     ```
 
   ## Error cases
+
+    ```elixir
     iex> Ndim.get_depth([1, [2, 3]])
     ** (ArgumentError) list is not a regular nested structure
 
     iex> Ndim.get_depth([[1, 2], [3]])
     ** (ArgumentError) list is not a regular nested structure
+    ```
 
   ## Return Value
   Returns an integer representing the depth (dimension) of the nested list.
