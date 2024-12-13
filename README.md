@@ -21,6 +21,13 @@ def deps do
 end
 ```
 
+## Core functions
+
+  * `d2map/2` ... `d5map/2` - Map a function over a 2-dimensional list (upto 5-dimensional list)
+  * `dmap/3` - The general version which maps a function over elements at any specified dimensional list
+  * `to_coord_map/1` - Transform a n-dimensional list to a coordinate map
+
+
 ## Terminology
 
 ### N-dimensional List
@@ -73,11 +80,6 @@ you need direct coordinate access:
 ]
 ```
 
-## Core functions
-
-  * `d2map/2` ... `d5map/2` - Map a function over a 2-dimensional list (upto 5-dimensional list)
-  * `dmap/3` - The general version which maps a function over elements at any specified dimensional list
-  * `to_coord_map/1` - Transform a n-dimensional list to a coordinate map
 
 ## Examples
 
